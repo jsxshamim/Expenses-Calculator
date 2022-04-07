@@ -118,12 +118,8 @@ document.getElementById("saving-btn").addEventListener("click", () => {
         // declare saving & remaining amount
         calculateSavings();
 
-        // remove class when error fix
-        document.getElementById("error-msg").classList.add("d-none");
-
         // error catching
     } catch (error) {
-        const errorContainer = document.getElementById("error-msg");
         if (error) {
             // displaying error message
             toast(error.message, "warning");
