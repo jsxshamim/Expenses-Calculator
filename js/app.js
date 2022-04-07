@@ -1,11 +1,12 @@
 // getValues from input with validation
 function getValue(id) {
     const getInput = document.getElementById(id);
-    const getInputValue = parseInt(getInput.value);
-    if (isNaN(getInputValue)) {
-        throw { message: id + " input should be a number" };
-    } else if (getInputValue < 0) {
+    const getInputValue = parseFloat(getInput.value);
+
+    if (getInputValue < 0) {
         throw { message: id + " input should be a positive number" };
+    } else if (isNaN(getInputValue)) {
+        throw { message: id + " input should be a number" };
     } else {
         return getInputValue;
     }
@@ -37,37 +38,73 @@ function getBalance() {
 // Handle Expenses Calculate
 document.getElementById("calculate-btn").addEventListener("click", () => {
     try {
-        inputData.salary = getValue("salary");
-        inputData.food = getValue("food");
-        inputData.rent = getValue("rent");
-        inputData.cloth = getValue("cloth");
+        if (getValue("salary") < getValue("food") + getValue("rent") + getValue("cloth")) {
+            throw { message: "You haven't enough salary for expenses" };
+        } else {
+            inputData.salary = getValue("salary");
+            inputData.food = getValue("food");
+            inputData.rent = getValue("rent");
+            inputData.cloth = getValue("cloth");
+            // set total expenses
+            const totalExpenses = getTotalExpenses();
+            document.getElementById("total-expenses").innerText = totalExpenses;
 
-        // set total expenses
-        const totalExpenses = getTotalExpenses();
-        document.getElementById("total-expenses").innerText = totalExpenses;
+            // set balance
+            const balance = getBalance();
+            document.getElementById("balance").innerText = balance;
 
-        // set balance
-        const balance = getBalance();
-        document.getElementById("balance").innerText = balance;
+            // reset input value
+            resetValue("salary", "food", "rent", "cloth");
+        }
+
+        // remove class when error fix
+        document.getElementById("error-msg").classList.add("d-none");
     } catch (error) {
-        console.log(error.message);
-    } finally {
-        resetValue("salary", "food", "rent", "cloth");
+        const errorContainer = document.getElementById("error-msg");
+        if (error) {
+            errorContainer.innerText = error.message;
+            errorContainer.classList.remove("d-none");
+        }
     }
 });
 
+// calculate & set remaining balance with error handling
+function getRemaining(savingAmount) {
+    const remainingBalance = getBalance() - savingAmount;
+    const remainingDisplay = document.getElementById("remaining-balance");
+    if (remainingBalance < 0) {
+        throw { message: "You haven't enough money for saving" };
+    } else {
+        remainingDisplay.innerText = remainingBalance;
+    }
+}
+
 // Handle Saving Amount with error
 document.getElementById("saving-btn").addEventListener("click", () => {
-    // get saving percentage value
-    const savingPercentage = getValue("saving");
+    try {
+        // get saving percentage value
+        const savingPercentage = getValue("saving");
+        // calculate & set savings amount
+        const savingAmount = (savingPercentage / 100) * inputData.salary;
 
-    // calculate & set savings amount
-    const savingAmount = (savingPercentage / 100) * inputData.salary;
-    document.getElementById("saving-amount").innerText = savingAmount;
+        if (isNaN(inputData.salary)) {
+            throw { message: "Saving can't add before calculating expenses" };
+        } else {
+            document.getElementById("saving-amount").innerText = savingAmount;
+        }
 
-    // calculate & set remaining balance
-    const remainingBalance = getBalance() - savingAmount;
-    document.getElementById("remaining-balance").innerText = remainingBalance;
+        // calculate & set remaining balance
+        getRemaining(savingAmount);
+
+        // remove class when error fix
+        document.getElementById("error-msg").classList.add("d-none");
+    } catch (error) {
+        const errorContainer = document.getElementById("error-msg");
+        if (error) {
+            errorContainer.innerText = error.message;
+            errorContainer.classList.remove("d-none");
+        }
+    }
 
     // reset input value
     resetValue("saving");
