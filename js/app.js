@@ -11,6 +11,14 @@ function getValue(id) {
     }
 }
 
+// reset input value when data submitted successfully
+function resetValue() {
+    for (const id of arguments) {
+        const getInput = document.getElementById(id);
+        getInput.value = "";
+    }
+}
+
 // Handle Expenses Calculate
 document.getElementById("calculate-btn").addEventListener("click", () => {
     try {
