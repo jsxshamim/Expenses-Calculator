@@ -13,20 +13,26 @@
         <script src="https://kit.fontawesome.com/87f80bdbf6.js" crossorigin="anonymous"></script>
     </head>
     <body>
+        <!-- Header Section -->
+
         <header class="mb-5">
             <div class="container">
-                <h1 class="text-center">Money Expenses</h1>
+                <h1 class="text-center"><i class="fa-solid fa-sack-dollar"></i> Money Expenses</h1>
             </div>
         </header>
         <main>
             <section>
                 <div class="container">
                     <div class="row gx-5 align-items-center">
+                        <!-- Left Feature Image -->
                         <div class="col-6 px-5">
                             <img class="img-fluid" src="images/feature-image.png" alt="" />
                         </div>
+
+                        <!-- Right Expenses Calculation -->
                         <div class="col-6 px-5">
-                            <div id="error-msg" class="alert alert-danger d-none" role="alert">A simple danger alert—check it out!</div>
+                            <div id="error-msg" class="alert alert-danger d-none" role="alert"></div>
+
                             <div class="calculate-expenses">
                                 <h3 class="mb-3">Monthly Salary</h3>
                                 <div class="salary align-items-center d-flex">
@@ -40,7 +46,6 @@
                                 </div>
                                 <div class="expenses">
                                     <h3 class="mt-5 mb-3">Expenses</h3>
-
                                     <div class="align-items-center d-flex mb-4">
                                         <div class="col-2">
                                             <label for="food"> Food :</label>
@@ -75,6 +80,9 @@
                                     <button class="btn btn-primary btn-lg px-5 fw-bold" id="calculate-btn">Calculate</button>
                                 </div>
                             </div>
+
+                            <!-- Total Expenses -->
+
                             <div class="my-4">
                                 <div class="row align-items-center">
                                     <div class="col-6">
@@ -106,6 +114,8 @@
                                 </div>
                             </div>
 
+                            <!-- Saving Calculation -->
+
                             <div class="my-4">
                                 <div class="row align-items-center">
                                     <div class="col-6">
@@ -129,6 +139,26 @@
                 </div>
             </section>
         </main>
+
+        <!-- Error displaying by bootstrap toast -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="success-message" class="toast text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div id="success-body" class="toast-body"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error displaying by bootstrap toast -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="warning-message" class="toast text-white bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div id="warning-body" class="toast-body"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
 
         <!-- JavaScript Include Here -->
         <script src="js/app.js"></script>

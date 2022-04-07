@@ -12,6 +12,15 @@ function getValue(id) {
     }
 }
 
+// Error & Success showing toast
+function toast(message, type) {
+    const errorMessage = document.getElementById(type + "-body");
+    errorMessage.innerText = message;
+    let errorToast = document.getElementById(type + "-message");
+    let toast = new bootstrap.Toast(errorToast);
+    toast.show();
+}
+
 // reset input value when data submitted successfully
 function resetValue() {
     for (const id of arguments) {
@@ -45,6 +54,7 @@ document.getElementById("calculate-btn").addEventListener("click", () => {
             inputData.food = getValue("food");
             inputData.rent = getValue("rent");
             inputData.cloth = getValue("cloth");
+
             // set total expenses
             const totalExpenses = getTotalExpenses();
             document.getElementById("total-expenses").innerText = totalExpenses;
@@ -53,12 +63,16 @@ document.getElementById("calculate-btn").addEventListener("click", () => {
             const balance = getBalance();
             document.getElementById("balance").innerText = balance;
 
-            // reset input value
+            toast("Expenses Calculated, Saving Amount for future", "success");
+
+            // reset input values
             resetValue("salary", "food", "rent", "cloth");
         }
 
         // remove class when error fix
         document.getElementById("error-msg").classList.add("d-none");
+
+        // error catching
     } catch (error) {
         const errorContainer = document.getElementById("error-msg");
         if (error) {
@@ -69,43 +83,50 @@ document.getElementById("calculate-btn").addEventListener("click", () => {
 });
 
 // calculate & set remaining balance with error handling
-function getRemaining(savingAmount) {
+function calculateSavings() {
+    // get saving percentage value
+    const savingPercentage = getValue("saving");
+
+    // calculate savings amount
+    const savingAmount = (savingPercentage / 100) * inputData.salary;
+
+    // get remaining balance
     const remainingBalance = getBalance() - savingAmount;
     const remainingDisplay = document.getElementById("remaining-balance");
-    if (remainingBalance < 0) {
+
+    // condition check for saving money
+    if (remainingBalance <= 0) {
         throw { message: "You haven't enough money for saving" };
     } else {
         remainingDisplay.innerText = remainingBalance;
+        document.getElementById("saving-amount").innerText = savingAmount; // set saving amount
+
+        // displaying success message for savings
+        toast("Successfully added " + savingPercentage + "% Savings", "success");
+
+        // reset saving input value
+        resetValue("saving");
     }
 }
 
 // Handle Saving Amount with error
 document.getElementById("saving-btn").addEventListener("click", () => {
     try {
-        // get saving percentage value
-        const savingPercentage = getValue("saving");
-        // calculate & set savings amount
-        const savingAmount = (savingPercentage / 100) * inputData.salary;
-
         if (isNaN(inputData.salary)) {
             throw { message: "Saving can't add before calculating expenses" };
-        } else {
-            document.getElementById("saving-amount").innerText = savingAmount;
         }
-
-        // calculate & set remaining balance
-        getRemaining(savingAmount);
+        // declare saving & remaining amount
+        calculateSavings();
 
         // remove class when error fix
         document.getElementById("error-msg").classList.add("d-none");
+
+        // error catching
     } catch (error) {
         const errorContainer = document.getElementById("error-msg");
         if (error) {
-            errorContainer.innerText = error.message;
-            errorContainer.classList.remove("d-none");
+            // displaying error message
+            toast(error.message, "warning");
         }
     }
-
-    // reset input value
-    resetValue("saving");
 });
