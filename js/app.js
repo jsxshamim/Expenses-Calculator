@@ -10,3 +10,23 @@ function getValue(id) {
         return getInputValue;
     }
 }
+
+// Handle Expenses Calculate
+document.getElementById("calculate-btn").addEventListener("click", () => {
+    try {
+        const salary = getValue("salary");
+        const foodExpenses = getValue("food");
+        const rentExpenses = getValue("rent");
+        const clothExpenses = getValue("cloth");
+
+        const totalExpenses = foodExpenses + rentExpenses + clothExpenses;
+        document.getElementById("total-expenses").innerText = totalExpenses;
+
+        const balance = salary - totalExpenses;
+        document.getElementById("balance").innerText = balance;
+    } catch (error) {
+        console.log(error.message);
+    } finally {
+        resetValue("salary", "food", "rent", "cloth");
+    }
+});
