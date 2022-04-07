@@ -31,8 +31,10 @@ header {
     display: flex;
     align-items: center;
 }
-#calculate-btn {
-    margin-left: -5px;
+#calculate-btn,
+#saving-btn {
+    margin-left: -5px px;
+    background: linear-gradient(45deg, #6e71f5, #07ccbf);
 }
 .error-msg {
     position: absolute;
